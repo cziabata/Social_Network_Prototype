@@ -1,0 +1,10 @@
+.header {
+    grid-area: header;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,70,121,0) 76%, rgba(0,212,255,1) 100%);
+    -webkit-box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 5px 47px 44px 34px rgba(72,81,204,0); 
+    box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 5px 47px 44px 34px rgba(72,81,204,0);
+  }
+  .header img {
+    width: 70px;
+    height: 60px;
+  }
