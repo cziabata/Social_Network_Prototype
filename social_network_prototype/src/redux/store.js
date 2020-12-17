@@ -1,3 +1,6 @@
+import { dialogs_reducer } from "./dialogs_reducer";
+import { profile_reducer } from "./profile_reducer";
+
 let store = {
   _state: {
     profilePage: {
@@ -22,29 +25,24 @@ let store = {
           {id: "3", message: "MESSAGE 3"},
           {id: "4", message: "MESSAGE 4"},
         ],
+      newMessage: "",
     },
-  },
-  getState() {
-    return this._state;
   },
   _rerenderEntireTree() {
     console.log("state changed");
   },
-  addPost() {
-    let newPost = {
-      id: 5, text: this._state.profilePage.newPostText, likesCount: 7
-    };
-    this._state.profilePage.posts.push(newPost);
-    this._state.profilePage.newPostText = "";
-    this._rerenderEntireTree(this._state);
+
+  getState() {
+    return this._state;
   },
-  updateNewPostText(newText) {
-    this._state.profilePage.newPostText = newText;
-    this._rerenderEntireTree(this._state);
-  },
-  subscriber(observer) {
+  subscribe(observer) {
     this._rerenderEntireTree = observer;
+  },
+  dispatch(action) {
+    this._state.profilePage = profile_reducer(this._state.profilePage, action);
+    this._state.dialogsPage = dialogs_reducer(this._state.dialogsPage, action);
+
+    this._rerenderEntireTree(this.getState());
   }
 } 
-
 export default store;

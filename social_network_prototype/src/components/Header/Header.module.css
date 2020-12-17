@@ -8,3 +8,10 @@
     width: 70px;
     height: 60px;
   }
+  .authInfo {
+    float: right;
+  }
+  .authInfo a {
+    color: tomato;
+    text-decoration: none;
+  }
