@@ -62,6 +62,9 @@ export let users_reducer = (state = initialState, action) => {
         case TOGGLE_BUTTON_FETCHING:
             return {
                 ...state,
+                disabledUsers: action.isFetching 
+                               ? [...state.disabledUsers, action.userId]
+                               : state.disabledUsers.filter(id => id != action.userId)
             }
         default: 
             return state;
@@ -74,3 +77,4 @@ export const setUsers = (users) => ({type: SET_USERS, users});
 export const setCurrentPage = (pageNumber) => ({type: SET_CURRENT_PAGE, pageNumber});
 export const setTotalUsersCount = (usersNumber) => ({type: SET_TOTAL_USERS_COUNT, usersNumber});
 export const setIsFetching = (isFetching) => ({type: SET_IS_FETCHING, isFetching});
+export const setDisabledUsers = (isFetching, userId) => ({type: TOGGLE_BUTTON_FETCHING, isFetching, userId})

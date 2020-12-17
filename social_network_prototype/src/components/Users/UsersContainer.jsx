@@ -2,7 +2,7 @@ import React from "react";
 import Users from "./Users";
 import { connect } from "react-redux";
 import * as axios from "axios";
-import { followUser, setCurrentPage, setUsers, unfollowUser, setTotalUsersCount, setIsFetching } from "../../redux/users_reducer";
+import { followUser, setCurrentPage, setUsers, unfollowUser, setTotalUsersCount, setIsFetching, setDisabledUsers } from "../../redux/users_reducer";
 import Preloader from "../common/Preloader/Preloader";
 import {getUsers} from "./../../api/api";
 
@@ -40,6 +40,8 @@ class UsersAPIContainer extends React.Component {
                     users={this.props.users}
                     unfollowUser={this.props.unfollowUser}
                     followUser={this.props.followUser}
+                    setDisabledUsers={this.props.setDisabledUsers}
+                    disabledUsers={this.props.disabledUsers}
                     />
     </>
   } 
@@ -52,6 +54,7 @@ let mapStateToProps = (state) => {
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
     isFetching: state.usersPage.isFetching,
+    disabledUsers: state.usersPage.disabledUsers,
   };
 };
 
@@ -62,4 +65,5 @@ export let UsersContainer = connect(mapStateToProps, {
   setCurrentPage,
   setTotalUsersCount,
   setIsFetching,
+  setDisabledUsers,
 })(UsersAPIContainer);

@@ -31,7 +31,8 @@ let Users = (props) => {
                     <div>{}</div>
                     <div className={classes.button}>
                         { users.followed ? 
-                            <button onClick={() => {
+                            <button disabled={props.disabledUsers.some( id => id === users.id )} onClick={() => {
+                                props.setDisabledUsers(true, users.id)
                                 axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${users.id}`,{
                                     withCredentials: true,
                                     headers: {
@@ -41,10 +42,12 @@ let Users = (props) => {
                                     if(response.data.resultCode === 0) {
                                         props.unfollowUser(users.id)
                                     }
+                                    props.setDisabledUsers(false, users.id)
                                 })
                             }}>Unfollow</button> 
                             : 
-                            <button onClick={ () => {
+                            <button disabled={props.disabledUsers.some( id => id === users.id )} onClick={ () => {
+                                props.setDisabledUsers(true, users.id)
                                 axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${users.id}`, {}, {
                                     withCredentials: true,
                                     headers: {
@@ -54,6 +57,7 @@ let Users = (props) => {
                                     if(response.data.resultCode === 0) {
                                         props.followUser(users.id)
                                     }
+                                    props.setDisabledUsers(false, users.id)
                                 })
                             }}>Follow</button>}
                     </div>
