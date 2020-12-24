@@ -2,7 +2,9 @@ import React from "react";
 import Users from "./Users";
 import { connect } from "react-redux";
 import * as axios from "axios";
-import { followUser, setCurrentPage, setUsers, unfollowUser, setTotalUsersCount, setIsFetching, setDisabledUsers } from "../../redux/users_reducer";
+import { followUser, setCurrentPage, setUsers, unfollowUser, setTotalUsersCount, setIsFetching, 
+         setDisabledUsers, setUsersThunkCreator, onPageChangedThunkCreator,
+         unfollowUserThunkCreator, followUserThunkCreator } from "../../redux/users_reducer";
 import Preloader from "../common/Preloader/Preloader";
 import {getUsers} from "./../../api/api";
 
@@ -13,21 +15,11 @@ class UsersAPIContainer extends React.Component {
   }
 
   componentDidMount() {
-      this.props.setIsFetching(true);
-      getUsers(this.props.pageSize).then(data => {
-          this.props.setIsFetching(false);
-          this.props.setUsers(data.items);
-          this.props.setTotalUsersCount(data.totalCount);
-      } )
+      this.props.setUsersThunkCreator(this.props.pageSize);
   }
 
   onPageChanged = (pages) => {
-      this.props.setIsFetching(true)
-      getUsers(this.props.pageSize, pages).then(data => {
-          this.props.setIsFetching(false);
-          this.props.setUsers(data.items);
-      })
-      this.props.setCurrentPage(pages);
+      this.props.onPageChangedThunkCreator(this.props.pageSize, pages);
   }
 
   render() {
@@ -42,6 +34,8 @@ class UsersAPIContainer extends React.Component {
                     followUser={this.props.followUser}
                     setDisabledUsers={this.props.setDisabledUsers}
                     disabledUsers={this.props.disabledUsers}
+                    unfollowUserThunkCreator={this.props.unfollowUserThunkCreator}
+                    followUserThunkCreator={this.props.followUserThunkCreator}
                     />
     </>
   } 
@@ -66,4 +60,8 @@ export let UsersContainer = connect(mapStateToProps, {
   setTotalUsersCount,
   setIsFetching,
   setDisabledUsers,
+  setUsersThunkCreator,
+  onPageChangedThunkCreator,
+  unfollowUserThunkCreator,
+  followUserThunkCreator,
 })(UsersAPIContainer);

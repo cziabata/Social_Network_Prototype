@@ -2,8 +2,10 @@ import React from "react";
 import Profile from "./Profile";
 import * as axios from "axios";
 import { connect } from "react-redux";
-import { setUserProfile } from "./../../redux/profile_reducer";
-import { withRouter } from "react-router-dom";
+import { setUserProfile, getUserProfile } from "./../../redux/profile_reducer";
+import { withRouter, Redirect } from "react-router-dom";
+import { usersAPI } from "../../api/api";
+import { ProfileRedirect } from "../hoc/ProfileRedirect";
 
 class ProfileContainer extends React.Component {
     constructor(props) {
@@ -14,9 +16,7 @@ class ProfileContainer extends React.Component {
         if(!userId) {
             userId = 2;
         }
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId).then(response => {
-            this.props.setUserProfile(response.data);
-        })
+        this.props.getUserProfile(userId);
     }
     render() {
        return (
@@ -27,6 +27,15 @@ class ProfileContainer extends React.Component {
     }
 }
 
+{/*     
+        // HOC logic - redirect if user log out (more on hoc directory) //
+        
+        let ProfileRedirectContainer = ProfileRedirect(ProfileContainer);
+        let WithRouteDataProfileContainer = withRouter(ProfileRedirectContainer) />
+
+*/}
+
+
 let WithRouteDataProfileContainer = withRouter(ProfileContainer)
 
 let mapStateToProps = (state) => {
@@ -35,4 +44,4 @@ let mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {setUserProfile})(WithRouteDataProfileContainer);
+export default connect(mapStateToProps, {setUserProfile, getUserProfile})(WithRouteDataProfileContainer);

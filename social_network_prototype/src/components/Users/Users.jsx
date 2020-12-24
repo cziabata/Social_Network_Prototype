@@ -3,6 +3,7 @@ import userIcon from "./../../assets/images/users.jpg"
 import classes from "./Users.module.css";
 import { NavLink } from "react-router-dom";
 import * as axios from "axios";
+import { usersAPI } from "./../../api/api";
 
 let Users = (props) => {
 
@@ -32,33 +33,11 @@ let Users = (props) => {
                     <div className={classes.button}>
                         { users.followed ? 
                             <button disabled={props.disabledUsers.some( id => id === users.id )} onClick={() => {
-                                props.setDisabledUsers(true, users.id)
-                                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${users.id}`,{
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "6847b8b0-6480-41e7-80b9-70115535fc82"
-                                    }
-                                }).then(response => {
-                                    if(response.data.resultCode === 0) {
-                                        props.unfollowUser(users.id)
-                                    }
-                                    props.setDisabledUsers(false, users.id)
-                                })
+                                props.unfollowUserThunkCreator(users.id)
                             }}>Unfollow</button> 
                             : 
                             <button disabled={props.disabledUsers.some( id => id === users.id )} onClick={ () => {
-                                props.setDisabledUsers(true, users.id)
-                                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${users.id}`, {}, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "6847b8b0-6480-41e7-80b9-70115535fc82"
-                                    }
-                                }).then(response => {
-                                    if(response.data.resultCode === 0) {
-                                        props.followUser(users.id)
-                                    }
-                                    props.setDisabledUsers(false, users.id)
-                                })
+                                props.followUserThunkCreator(users.id);
                             }}>Follow</button>}
                     </div>
                 </div>)

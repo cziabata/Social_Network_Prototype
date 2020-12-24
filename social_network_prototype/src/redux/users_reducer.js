@@ -1,3 +1,5 @@
+import { usersAPI } from "./../api/api";
+
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
@@ -77,4 +79,50 @@ export const setUsers = (users) => ({type: SET_USERS, users});
 export const setCurrentPage = (pageNumber) => ({type: SET_CURRENT_PAGE, pageNumber});
 export const setTotalUsersCount = (usersNumber) => ({type: SET_TOTAL_USERS_COUNT, usersNumber});
 export const setIsFetching = (isFetching) => ({type: SET_IS_FETCHING, isFetching});
-export const setDisabledUsers = (isFetching, userId) => ({type: TOGGLE_BUTTON_FETCHING, isFetching, userId})
+export const setDisabledUsers = (isFetching, userId) => ({type: TOGGLE_BUTTON_FETCHING, isFetching, userId});
+
+export const setUsersThunkCreator = (pageSize) => { 
+    return (dispatch) => {
+    dispatch(setIsFetching(true));
+    usersAPI.getUsers(pageSize).then(data => {
+            dispatch(setIsFetching(false));
+            dispatch(setUsers(data.items));
+            dispatch(setTotalUsersCount(data.totalCount));
+        } )
+    }
+}
+
+export const onPageChangedThunkCreator = (pageSize, pages) => {
+    return (dispatch) => {
+        dispatch(setIsFetching(true))
+        usersAPI.getUsers(pageSize, pages).then(data => {
+            dispatch(setIsFetching(false));
+            dispatch(setUsers(data.items));
+        })
+        dispatch(setCurrentPage(pages));
+    }
+}
+
+export const followUserThunkCreator = (usersId) => {
+    return (dispatch) => {
+        dispatch(setDisabledUsers(true, usersId))
+        usersAPI.follow(usersId).then(response => {
+            if(response.data.resultCode === 0) {
+                dispatch(followUser(usersId))
+            }
+            dispatch(setDisabledUsers(false, usersId))
+        })
+    }
+}
+
+export const unfollowUserThunkCreator = (usersId) => {
+    return (dispatch) => {
+        dispatch(setDisabledUsers(true, usersId));
+            usersAPI.unfollow(usersId).then(response => {
+                if(response.data.resultCode === 0) {
+                    dispatch(unfollowUser(usersId))
+                }
+                dispatch(setDisabledUsers(false, usersId))
+                })
+    }
+}
